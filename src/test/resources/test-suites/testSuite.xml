@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="test suite" verbose="2" preserve-order="false" parallel="tests">
+<suite name="test suite" verbose="2" preserve-order="false">
     <listeners>
         <listener class-name="com.freenow.apitest.utility.CustomListeners"/>
 
     </listeners>
-    <test name="Sample test">
+    <test name="Backend test">
         <classes>
-            <class name="com.freenow.apitest.tests.ApiWorkflow"/>
+            <class name="com.freenow.apitest.tests.VerifyUserPosts"/>
         </classes>
     </test> <!-- Test -->
 </suite> <!-- Suite -->

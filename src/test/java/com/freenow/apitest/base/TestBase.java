@@ -4,7 +4,6 @@ import com.freenow.apitest.constants.ApiConstants;
 import com.freenow.apitest.utility.ExtentManager;
 import com.freenow.apitest.utility.ReportUtil;
 import com.relevantcodes.extentreports.ExtentReports;
-import com.relevantcodes.extentreports.ExtentTest;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.testng.ITestContext;
@@ -15,30 +14,28 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.Iterator;
 import java.util.Properties;
+
+import static com.freenow.apitest.utility.Utils.readPropsFile;
+import static com.freenow.apitest.utility.Utils.readTestProps;
 
 public class TestBase {
 
     public static Properties testProps;
-    public static Logger logger = Logger.getLogger(TestBase.class.getName());
-    protected static ExtentTest test;
-    private static ExtentReports extent;
-    final String filePath = "testReport.html";
+    private static Logger logger = Logger.getLogger(TestBase.class.getName());
 
 
     @BeforeSuite
     protected void setup(ITestContext context) {
-        extent = ExtentManager.getReporter(filePath);
+        String filePath = "testReport.html";
+        ExtentReports extent = ExtentManager.getReporter(filePath);
         extent.loadConfig(new File(System.getProperty("user.dir") + File.separator + "extent-config.xml"));
         setupSuite();
         ReportUtil.initReports(logger);
     }
 
-    public void setupSuite() {
+    private void setupSuite() {
         testProps = readTestProps(ApiConstants.TEST_RESOURCE_DIR + "test.properties");
         String filePath = System.getProperty("user.dir") + File.separator + "log4j.properties";
         Properties log4jProps = readPropsFile(filePath);
@@ -64,27 +61,5 @@ public class TestBase {
         ReportUtil.endReports();
     }
 
-    public Properties readPropsFile(String filePath) {
-        Properties props = new Properties();
-        try {
-            props.load(new FileInputStream(filePath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return props;
-    }
-
-    public Properties readTestProps(String filePath) {
-        Properties testProps = readPropsFile(filePath);
-        Iterator<Object> iter = testProps.keySet().iterator();
-
-        while (iter.hasNext()) {
-            String key = iter.next().toString();
-            String value = System.getProperty(key);
-            if (value != null)
-                testProps.setProperty(key, value);
-        }
-        return testProps;
-    }
 
 }

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.freenow.apitest.response.comments.Comment;
 import com.freenow.apitest.response.posts.Post;
 import com.freenow.apitest.response.users.User;
-import com.freenow.apitest.utility.CustomExceptions;
 import com.freenow.apitest.utility.ReportUtil;
 import com.freenow.apitest.utility.RestUtil;
 import com.jayway.restassured.response.Response;
@@ -24,7 +23,7 @@ public class ValidateResponse {
     private ObjectMapper mapper = new ObjectMapper();
 
 
-    public void validateEmail(Comment[] comment) {
+    private void validateEmail(Comment[] comment) {
         try {
             ReportUtil.log("Verify email format ", "email format verification starts ", "Info");
             String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." +
@@ -50,7 +49,7 @@ public class ValidateResponse {
         }
     }
 
-    public int getUserId(User[] user, String username) throws CustomExceptions {
+    public int getUserId(User[] user, String username) {
         for (User ite : user) {
             if (ite.getUsername().equalsIgnoreCase(username)) {
                 userId = ite.getId();
@@ -78,7 +77,7 @@ public class ValidateResponse {
     public void validateEmailInCommentsAPI(List<String> postId) {
         try {
             for (String s : postId) {
-                response = RestUtil.callGet(testProps.getProperty("baseurl"), testProps.getProperty("comments"), "postId", s);
+                response = RestUtil.callGet(testProps.getProperty("baseUrl"), testProps.getProperty("comments"), "postId", s);
                 Assert.assertNotNull(response.body(), "Comment API response is Null");
                 ReportUtil.log("Fetch Comments for postId: " + s, "Successfully fetched comments API response for a post ", "Info");
                 comments = mapper.readValue(response.asString(), Comment[].class);
