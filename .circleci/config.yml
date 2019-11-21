@@ -1,0 +1,23 @@
+version: 2.0
+jobs:
+  "Free-Now":
+    docker:
+      - image: circleci/openjdk:stretch
+    build:
+    steps:
+      - checkout
+      - run: mvn clean install
+      - run: mvn test
+      - store_test_results:
+          path: test-output
+      - store_artifacts:
+          path: test-output
+
+
+
+
+workflows:
+  version: 2
+  build-workflow:
+    jobs:
+      - "Free-Now"
